@@ -25,7 +25,6 @@ public class UnitOfMeasureRepositoryIT {
 		
 	}
 	
-	
 	@Test
 	public void findByDescription() throws Exception {
 		Optional<UnitOfMeasure> uomOptional = unitOfMeasureRepository.findByDescription("Teaspoon");
@@ -36,7 +35,14 @@ public class UnitOfMeasureRepositoryIT {
 	@Test
 	public void findByDescriptionCup() throws Exception {
 		Optional<UnitOfMeasure> uomOptional = unitOfMeasureRepository.findByDescription("Cup");
-		assertEquals("Cup", uomOptional.get().getDescription());
-			
+		assertEquals("Cup", uomOptional.get().getDescription());	
 	}
+	
+	@Test
+	public void findByDescription_American() throws Exception {
+		Optional<UnitOfMeasure> uomOptional = unitOfMeasureRepository.findByDescription("Dash");
+		assertEquals("Dash", uomOptional.get().getDescription());	
+	}
+	
+	
 }

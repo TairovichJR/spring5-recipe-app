@@ -43,7 +43,8 @@ public class RecipeCommandToRecipeTest {
 
     @Test
     public void testEmptyObject() throws Exception {
-        assertNotNull(converter.convert(new RecipeCommand()));
+    	Recipe recipe = converter.convert(new RecipeCommand());
+        assertNotNull(recipe);
     }
 
     @Test

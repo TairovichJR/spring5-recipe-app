@@ -19,6 +19,7 @@ import javax.persistence.OneToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,6 +29,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Data
 @Entity
 public class Recipe {
 
@@ -61,12 +63,10 @@ public class Recipe {
 	private Set<Category> categories = new HashSet<>();
 
 	public void setNotes(Notes notes) {
-		this.notes = notes;
-        notes.setRecipe(this);
-        if (notes != null) {
-            this.notes = notes;
-            notes.setRecipe(this);
-        }
+		if (notes != null) {
+			this.notes = notes;
+			notes.setRecipe(this);
+		}
 	}
 
 	public Recipe addIngredient(Ingredient ingredient) {

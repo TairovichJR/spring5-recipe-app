@@ -1,17 +1,13 @@
 package guru.springframework.recipe.services;
 
 import java.util.Optional;
-
 import javax.transaction.Transactional;
-
 import org.springframework.stereotype.Service;
-
 import guru.springframework.recipe.commands.IngredientCommand;
 import guru.springframework.recipe.converters.IngredientCommandToIngredient;
 import guru.springframework.recipe.converters.IngredientToIngredientCommand;
 import guru.springframework.recipe.domain.Ingredient;
 import guru.springframework.recipe.domain.Recipe;
-import guru.springframework.recipe.repositories.IngredientRepository;
 import guru.springframework.recipe.repositories.RecipeRepository;
 import guru.springframework.recipe.repositories.UnitOfMeasureRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -27,16 +23,14 @@ public class IngredientServiceImpl implements IngredientService {
 	private final IngredientCommandToIngredient ingredientCommandToIngredient;
 	private final RecipeRepository recipeRepository;
 	private final UnitOfMeasureRepository unitOfMeasureRepository;
-	private final IngredientRepository ingredientRepository;
 	
 	public IngredientServiceImpl(IngredientToIngredientCommand ingredientToIngredientCommand,
 			IngredientCommandToIngredient ingredientCommandToIngredient, RecipeRepository recipeRepository,
-			UnitOfMeasureRepository unitOfMeasureRepository, IngredientRepository ingredientRepository) {
+			UnitOfMeasureRepository unitOfMeasureRepository) {
 		this.ingredientToIngredientCommand = ingredientToIngredientCommand;
 		this.ingredientCommandToIngredient = ingredientCommandToIngredient;
 		this.recipeRepository = recipeRepository;
 		this.unitOfMeasureRepository = unitOfMeasureRepository;
-		this.ingredientRepository = ingredientRepository;
 	}
 
 	@Override

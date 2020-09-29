@@ -1,16 +1,12 @@
 package guru.springframework.recipe.services;
 
-import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-
 import java.util.Optional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
 import guru.springframework.recipe.commands.IngredientCommand;
 import guru.springframework.recipe.converters.IngredientCommandToIngredient;
 import guru.springframework.recipe.converters.IngredientToIngredientCommand;
@@ -18,7 +14,6 @@ import guru.springframework.recipe.converters.UnitOfMeasureCommandToUnitOfMeasur
 import guru.springframework.recipe.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import guru.springframework.recipe.domain.Ingredient;
 import guru.springframework.recipe.domain.Recipe;
-import guru.springframework.recipe.repositories.IngredientRepository;
 import guru.springframework.recipe.repositories.RecipeRepository;
 import guru.springframework.recipe.repositories.UnitOfMeasureRepository;
 
@@ -36,10 +31,6 @@ public class IngredientServiceImplTest {
 	@Mock
 	UnitOfMeasureRepository unitOfMeasureRepository;
 
-	@Mock
-	IngredientRepository ingredientRepository;
-	
-	
 	IngredientService ingredientService;
 
 	// init converters
@@ -55,7 +46,7 @@ public class IngredientServiceImplTest {
 		MockitoAnnotations.initMocks(this);
 
 		ingredientService = new IngredientServiceImpl(ingredientToIngredientCommand, ingredientCommandToIngredient,
-				recipeRepository, unitOfMeasureRepository, ingredientRepository);
+				recipeRepository, unitOfMeasureRepository);
 	}
 
 	@Test

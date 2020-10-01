@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import guru.springframework.recipe.commands.RecipeCommand;
 import guru.springframework.recipe.controllers.RecipeController;
 import guru.springframework.recipe.domain.Recipe;
+import guru.springframework.recipe.exceptions.NotFoundException;
 import guru.springframework.recipe.services.RecipeService;
 
 public class RecipeControllerTest {
@@ -41,20 +42,30 @@ public class RecipeControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 	
-	@Test
-	public void getRecipeById() throws Exception {
-		Recipe recipe = Recipe.builder().id(1L).build();
-		
-		MockMvc mvcMvc = MockMvcBuilders.standaloneSetup(controller).build();
-		
-		when(recipeService.findById(anyLong())).thenReturn(recipe);
-		
-		mvcMvc.perform(get("/recipe/1/show"))
-				.andExpect(status().is(200))
-				.andExpect(view().name("recipe/show"))
-				.andExpect(model().attributeExists("recipe"));
-				
-	}
+    @Test
+    public void testGetRecipe() throws Exception {
+
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+
+        when(recipeService.findById(anyLong())).thenReturn(recipe);
+
+        mockMvc.perform(get("/recipe/1/show"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe/show"))
+                .andExpect(model().attributeExists("recipe"));
+    }
+	
+    @Test
+    public void testGetRecipeNotFound() throws Exception {
+
+        when(recipeService.findById(anyLong())).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(get("/recipe/1/show"))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("404error"));
+    }
+	
 	
 	@Test
     public void testGetNewRecipeForm() throws Exception {

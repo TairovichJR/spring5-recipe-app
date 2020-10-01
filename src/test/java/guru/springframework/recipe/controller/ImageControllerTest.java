@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import guru.springframework.recipe.commands.RecipeCommand;
+import guru.springframework.recipe.controllers.ControllerExceptionHandler;
 import guru.springframework.recipe.controllers.ImageController;
 import guru.springframework.recipe.services.ImageService;
 import guru.springframework.recipe.services.RecipeService;
@@ -41,7 +43,7 @@ public class ImageControllerTest {
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		controller = new ImageController(imageService, recipeService);
-		mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+		mockMvc = MockMvcBuilders.standaloneSetup(controller).setControllerAdvice(new ControllerExceptionHandler()).build();
 	}
 	
 	@Test
@@ -99,16 +101,12 @@ public class ImageControllerTest {
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	@Test
+	public void testGetImageNumberFormatException() throws Exception {
+		mockMvc.perform(get("/recipe/df/recipeimage"))
+				.andExpect(status().isBadRequest())
+				.andExpect(view().name("400error"));
+		
+	}
 	
 }

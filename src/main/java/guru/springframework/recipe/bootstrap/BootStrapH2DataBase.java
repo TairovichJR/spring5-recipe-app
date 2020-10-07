@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,13 +24,14 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
+@Profile("h2database")
+public class BootStrapH2DataBase implements ApplicationListener<ContextRefreshedEvent> {
 
 	private final CategoryRepository categoryRepository;
 	private final RecipeRepository recipeRepository;
 	private final UnitOfMeasureRepository unitOfMeasureRepository;
 
-	public DataLoader(CategoryRepository categoryRepository, RecipeRepository recipeRepository,
+	public BootStrapH2DataBase(CategoryRepository categoryRepository, RecipeRepository recipeRepository,
 			UnitOfMeasureRepository unitOfMeasureRepository) {
 		this.categoryRepository = categoryRepository;
 		this.recipeRepository = recipeRepository;
@@ -45,13 +47,13 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
 	private List<Recipe> getRecipes() {
 
-		List<Recipe> recipes = new ArrayList<>();
+		List<Recipe> recipes = new ArrayList<>(2);
 
-		// get UMOs
+		// get UOMs
 		Optional<UnitOfMeasure> eachUomOptional = unitOfMeasureRepository.findByDescription("Each");
 
 		if (!eachUomOptional.isPresent()) {
-			throw new RuntimeException("Expected UOM is not found");
+			throw new RuntimeException("Expected UOM Not Found");
 		}
 
 		Optional<UnitOfMeasure> tableSpoonUomOptional = unitOfMeasureRepository.findByDescription("Tablespoon");
@@ -89,9 +91,9 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		UnitOfMeasure tableSpoonUom = tableSpoonUomOptional.get();
 		UnitOfMeasure teapoonUom = tableSpoonUomOptional.get();
 		UnitOfMeasure dashUom = dashUomOptional.get();
-		UnitOfMeasure pintUom = pintUomOptional.get();
+		UnitOfMeasure pintUom = dashUomOptional.get();
 		UnitOfMeasure cupsUom = cupsUomOptional.get();
-
+		
 		// get Categories
 		Optional<Category> americanCategoryOptional = categoryRepository.findByDescription("American");
 
@@ -156,8 +158,8 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		guacRecipe.getCategories().add(mexicanCategory);
 
 		guacRecipe.setUrl("http://www.simplyrecipes.com/recipes/perfect_guacamole/");
-        guacRecipe.setServings(4);
-        guacRecipe.setSource("Simply Recipes");
+		guacRecipe.setServings(4);
+		guacRecipe.setSource("Simply Recipes");
 
 		// add to return list
 		recipes.add(guacRecipe);
